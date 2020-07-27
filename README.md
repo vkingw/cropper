@@ -25,6 +25,18 @@ infoText
 ```
 #### 提示信息文字<br/>type:&nbsp;&nbsp;string&nbsp;&nbsp;|&nbsp;&nbsp;默认值:&nbsp;&nbsp;'上传照片用于人脸识别开门或者签到' ####
 ```
+uploadText
+```
+#### 上传提示信息文字<br/>type:&nbsp;&nbsp;string&nbsp;&nbsp;|&nbsp;&nbsp;默认值:&nbsp;&nbsp;'正在上传' ####
+```
+errorText
+```
+#### 超出上传大小提示信息文字<br/>type:&nbsp;&nbsp;string&nbsp;&nbsp;|&nbsp;&nbsp;默认值:&nbsp;&nbsp;'上传大小不能超过10M' ####
+```
+maxSize
+```
+#### 最大上传文件大小<br/>type:&nbsp;&nbsp;number&nbsp;&nbsp;|&nbsp;&nbsp;默认值:&nbsp;&nbsp;10（M） ####
+```
 accept
 ```
 #### 支持上传图片格式<br/>type:&nbsp;&nbsp;string&nbsp;&nbsp;|&nbsp;&nbsp;默认值:&nbsp;&nbsp;'.jpg, .jpeg, .png' ####

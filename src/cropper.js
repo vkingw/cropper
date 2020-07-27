@@ -46,8 +46,9 @@ export default class Crop extends React.PureComponent {
   readyCopper () {
     const { width,
       height } = this.props;
-
-    this.refs.cropper.setCropBoxData({ width: width, height: height, });
+      const offsetWidth = document.querySelector('.cropper-wrap-box').offsetWidth;
+      const offsetHeight = document.querySelector('.cropper-wrap-box').offsetHeight;
+    this.refs.cropper.setCropBoxData({ width: width, height: height, left:(offsetWidth-300)/2,top:(offsetHeight-300)/2});
     if (!ismobile(1)) {
       this.refs.cropper.rotate('-90');
     }
@@ -88,6 +89,7 @@ export default class Crop extends React.PureComponent {
           cropBoxResizable={false}
           cropBoxMovable={false}
           cropmove={this.move}
+          center
         // viewMode={1}
         />
         <div className={changeStyle(isMobile, 'btnGroup')}>

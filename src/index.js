@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 
 import './index.css';
 import Crop from './cropper';
+import Modal from './modal';
 
 
 export const changeStyle = (isMobile, className) => {
@@ -24,6 +25,8 @@ class ReactDemo extends React.Component {
         maxWidth: 300,
         maxHeight: 300,
         convertSize: 10000,
+        isShowToast:false,
+        isError:false
       }
     }
     this.onFileChange = this.onFileChange.bind(this)
@@ -39,10 +42,25 @@ class ReactDemo extends React.Component {
   }
 
   onFileChange (e) {
+    this.setState({
+      isShowToast:true
+    })
     const { files } = e.target;
-    const { compress } = this.props;
+    const { compress,maxSize } = this.props;
     const { defaultCompress } = this.state;
     const resCompress = { ...defaultCompress, ...compress };
+    const fileSize = files[0].size || 0
+    if(fileSize>maxSize*1024*1024){
+      this.setState({
+        isError:true,
+      })
+      setTimeout(()=>
+      this.setState({
+        isShowToast:false
+      }),2000)
+      return
+    }
+
     if (files) {
       const imageCompressor = new ImageCompressor();
       imageCompressor
@@ -50,6 +68,7 @@ class ReactDemo extends React.Component {
         .then(result => {
           this.getBase64(result, res => {
             this.setState({
+              isShowToast:false,
               fileUrl: res,
               showCropper: true,
             });
@@ -67,47 +86,54 @@ class ReactDemo extends React.Component {
 
 
   render () {
-    const { showCropper, fileUrl } = this.state;
-    const { btnText, infoText, accept, isMobile, imgSrc, onChange, minCropBoxWidth, minCropBoxHeight, width, height, toDataURLtype, btnBackText, btnConfirmText } = this.props;
-    return (
+    const { showCropper, fileUrl,isShowToast ,isError} = this.state;
+    const { btnText,infoText,errorText, accept, uploadText,isMobile, imgSrc, onChange, minCropBoxWidth, minCropBoxHeight, width, height, toDataURLtype, btnBackText, btnConfirmText } = this.props;
+     return (
       <div className={changeStyle(isMobile, 'wrapper')}>
-        {!showCropper &&
-          <div className={changeStyle(isMobile, 'content')}>
-            <div className={changeStyle(isMobile, 'image')}>
-              <img className={changeStyle(isMobile, 'img')} src={imgSrc} alt="" />
-
-            </div>
-            <div className={changeStyle(isMobile, 'btnGroup')}>
-              <div className={changeStyle(isMobile, 'fileBtn')}>
-                <input className={changeStyle(isMobile, 'file')} type="file" onChange={this.onFileChange} accept={accept} />
-                <div className={changeStyle(isMobile, 'btn')}>
-                  {btnText}
+        {!isShowToast?
+          <div>
+          {!showCropper &&
+            <div className={changeStyle(isMobile, 'content')}>
+              <div className={changeStyle(isMobile, 'image')}>
+                <img className={changeStyle(isMobile, 'img')} src={imgSrc} alt="" />
+  
+              </div>
+              <div className={changeStyle(isMobile, 'btnGroup')}>
+                <div className={changeStyle(isMobile, 'fileBtn')}>
+                  <input className={changeStyle(isMobile, 'file')} type="file" onChange={this.onFileChange} accept={accept} capture="camera" />
+                  <div className={changeStyle(isMobile, 'btn')}>
+                    {btnText}
+                  </div>
                 </div>
               </div>
+              <div className={changeStyle(isMobile, 'tips')}>
+                <div className={changeStyle(isMobile, 'tip')}>{infoText}</div>
+              </div>
             </div>
-            <div className={changeStyle(isMobile, 'tips')}>
-              <div className={changeStyle(isMobile, 'tip')}>{infoText}</div>
+          }
+          {showCropper &&
+            <div className={changeStyle(isMobile, 'content')}>
+              <Crop
+                fileUrl={fileUrl}
+                onChange={onChange}
+                minCropBoxWidth={minCropBoxWidth}
+                minCropBoxHeight={minCropBoxHeight}
+                width={width}
+                height={height}
+                toDataURLtype={toDataURLtype}
+                btnBackText={btnBackText}
+                btnConfirmText={btnConfirmText}
+                infoText={infoText}
+                isMobile={isMobile}
+                onChangeShowCropper={showCropper => this.changeShowCropper(showCropper)}
+                onChangeShowCropper={showCropper => this.changeShowCropper(showCropper)}
+              />
             </div>
-          </div>
-        }
-        {showCropper &&
-          <div className={changeStyle(isMobile, 'content')}>
-            <Crop
-              fileUrl={fileUrl}
-              onChange={onChange}
-              minCropBoxWidth={minCropBoxWidth}
-              minCropBoxHeight={minCropBoxHeight}
-              width={width}
-              height={height}
-              toDataURLtype={toDataURLtype}
-              btnBackText={btnBackText}
-              btnConfirmText={btnConfirmText}
-              infoText={infoText}
-              isMobile={isMobile}
-              onChangeShowCropper={showCropper => this.changeShowCropper(showCropper)}
-            />
-          </div>
-        }
+          }
+          </div>:
+          <Modal uploadText={uploadText} isError={isError} errorText={errorText}/>
+          
+}
       </div >)
   }
 }
@@ -130,7 +156,11 @@ ReactDemo.defaultProps = {
   height: 300,
   toDataURLtype: 'image/jpeg',
   imgSrc: '',
-  isMobile: false
+  isMobile: false,
+  uploadText:'正在上传',
+  errorText:'上传大小不能超过10M',
+  maxSize:10
+  
 }
 
 ReactDemo.propTypes = {
@@ -138,6 +168,7 @@ ReactDemo.propTypes = {
   btnBackText: PropTypes.string,
   btnConfirmText: PropTypes.string,
   infoText: PropTypes.string,
+  uploadText: PropTypes.string,
   compress: PropTypes.object,
   accept: PropTypes.string,
   onChange: PropTypes.func,
@@ -145,8 +176,10 @@ ReactDemo.propTypes = {
   minCropBoxHeight: PropTypes.number,
   width: PropTypes.number,
   height: PropTypes.number,
+  maxSize: PropTypes.number,
   toDataURLtype: PropTypes.string,
   imgSrc: PropTypes.string,
+  errorText: PropTypes.string,
   isMobile: PropTypes.bool,
 }
 
