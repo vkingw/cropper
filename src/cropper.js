@@ -6,7 +6,7 @@ import Cropper from 'react-cropper';
 import 'cropperjs/dist/cropper.css';
 import * as styles from './index.css';
 import { changeStyle } from './index'
-import spinIcon from './assets/spin_icon.png'
+import spinIcon from './assets/spinIcon'
 
 
 
@@ -78,7 +78,7 @@ export default class Crop extends React.PureComponent {
       toDataURLtype,
       onChangeShowCropper,
       isMobile,
-      NeedRotate
+      needRotate
     } = this.props;
     return (
       <div className={changeStyle(isMobile, 'image')} >
@@ -100,7 +100,7 @@ export default class Crop extends React.PureComponent {
           center
         // viewMode={1}
         />
-        {NeedRotate && (
+        {needRotate && (
           <div className={changeStyle(isMobile, 'spinBox')}>
             <img 
               src={spinIcon} 
