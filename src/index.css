@@ -271,3 +271,22 @@ input:active {
   position: relative;
   transform: translateY(-50%);
 }
+
+.spinBox{
+  margin-top: 16px;
+  text-align: center;
+}
+
+.spinBox img{
+  width: 88px;
+  text-align: center;
+}
+
+.spinBoxApp{
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.spinBoxApp img{
+  width: 16%;
+}
