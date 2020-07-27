@@ -87,7 +87,7 @@ class ReactDemo extends React.Component {
 
   render () {
     const { showCropper, fileUrl,isShowToast ,isError} = this.state;
-    const { btnText,infoText,errorText, accept, uploadText,isMobile, imgSrc, onChange, minCropBoxWidth, minCropBoxHeight, width, height, toDataURLtype, btnBackText, btnConfirmText } = this.props;
+    const { btnText,infoText,errorText, accept, uploadText,isMobile, imgSrc, onChange, minCropBoxWidth, minCropBoxHeight, width, height, toDataURLtype, btnBackText, btnConfirmText, NeedRotate } = this.props;
      return (
       <div className={changeStyle(isMobile, 'wrapper')}>
         {!isShowToast?
@@ -125,6 +125,7 @@ class ReactDemo extends React.Component {
                 btnConfirmText={btnConfirmText}
                 infoText={infoText}
                 isMobile={isMobile}
+                NeedRotate={NeedRotate}
                 onChangeShowCropper={showCropper => this.changeShowCropper(showCropper)}
                 onChangeShowCropper={showCropper => this.changeShowCropper(showCropper)}
               />
@@ -159,15 +160,18 @@ ReactDemo.defaultProps = {
   isMobile: false,
   uploadText:'正在上传',
   errorText:'上传大小不能超过10M',
-  maxSize:10
-  
+  maxSize:10,
+  NeedRotate: true
 }
 
 ReactDemo.propTypes = {
   btnText: PropTypes.string,
   btnBackText: PropTypes.string,
   btnConfirmText: PropTypes.string,
-  infoText: PropTypes.string,
+  infoText: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element,
+  ]),
   uploadText: PropTypes.string,
   compress: PropTypes.object,
   accept: PropTypes.string,
@@ -181,6 +185,7 @@ ReactDemo.propTypes = {
   imgSrc: PropTypes.string,
   errorText: PropTypes.string,
   isMobile: PropTypes.bool,
+  NeedRotate: PropTypes.bool,
 }
 
 

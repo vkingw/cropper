@@ -6,6 +6,7 @@ import Cropper from 'react-cropper';
 import 'cropperjs/dist/cropper.css';
 import * as styles from './index.css';
 import { changeStyle } from './index'
+import spinIcon from './assets/spin_icon.png'
 
 
 
@@ -41,6 +42,9 @@ export default class Crop extends React.PureComponent {
     super(props);
     this.readyCopper = this.readyCopper.bind(this);
     // this.move = this.move.bind(this);
+    this.state = {
+      angle: 0,
+    }
   }
 
   readyCopper () {
@@ -51,6 +55,9 @@ export default class Crop extends React.PureComponent {
     this.refs.cropper.setCropBoxData({ width: width, height: height, left:(offsetWidth-300)/2,top:(offsetHeight-300)/2});
     if (!ismobile(1)) {
       this.refs.cropper.rotate('-90');
+      this.setState({
+        angle: -90
+      })
     }
     const info = this.refs.cropper.getData();
     console.log(info, 'info')
@@ -70,7 +77,8 @@ export default class Crop extends React.PureComponent {
       onChange,
       toDataURLtype,
       onChangeShowCropper,
-      isMobile
+      isMobile,
+      NeedRotate
     } = this.props;
     return (
       <div className={changeStyle(isMobile, 'image')} >
@@ -92,6 +100,21 @@ export default class Crop extends React.PureComponent {
           center
         // viewMode={1}
         />
+        {NeedRotate && (
+          <div className={changeStyle(isMobile, 'spinBox')}>
+            <img 
+              src={spinIcon} 
+              onClick={()=>{
+                const { angle } = this.state;
+                const newAngle = angle + 90;
+                this.refs.cropper.rotate(newAngle);
+                this.setState({
+                  angle: newAngle
+                })
+              }} 
+            />
+          </div>
+        )}
         <div className={changeStyle(isMobile, 'btnGroup')}>
           <div
             className={changeStyle(isMobile, 'btnCon')}
