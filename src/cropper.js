@@ -44,14 +44,25 @@ export default class Crop extends React.PureComponent {
     // this.move = this.move.bind(this);
     this.state = {
       angle: 0,
+      wrapWH: null
+    }
+  }
+
+  componentDidMount(){
+    const wrap = document.getElementById('cropperWrap');
+    if(wrap){
+      this.setState({
+        wrapWH: [wrap.offsetWidth, wrap.offsetHeight]
+      })
     }
   }
 
   readyCopper () {
     const { width,
       height } = this.props;
-      const offsetWidth = document.querySelector('.cropper-wrap-box').offsetWidth;
-      const offsetHeight = document.querySelector('.cropper-wrap-box').offsetHeight;
+      // const offsetWidth = document.querySelector('.cropper-wrap-box').offsetWidth;
+      // const offsetHeight = document.querySelector('.cropper-wrap-box').offsetHeight;
+      const [offsetWidth,offsetHeight] = this.state.wrapWH;
     this.refs.cropper.setCropBoxData({ width: width, height: height, left:(offsetWidth-300)/2,top:(offsetHeight-300)/2});
     if (!ismobile(1)) {
       this.refs.cropper.rotate('-90');
@@ -80,26 +91,28 @@ export default class Crop extends React.PureComponent {
       isMobile,
       needRotate
     } = this.props;
+    const { wrapWH } = this.state;
     return (
-      <div className={changeStyle(isMobile, 'image')} >
-
-        <Cropper
-          ref="cropper"
-          src={fileUrl}
-          style={{ height: '100%', width: '100%' }}
-          AspectRatio
-          guides
-          dragMode="move"
-          minCropBoxWidth={minCropBoxWidth}
-          minCropBoxHeight={minCropBoxHeight}
-          ready={this.readyCopper}
-          crop={this._crop}
-          cropBoxResizable={false}
-          cropBoxMovable={false}
-          cropmove={this.move}
-          center
-        // viewMode={1}
-        />
+      <div className={changeStyle(isMobile, 'image')} id="cropperWrap">
+        {Array.isArray(wrapWH) && (
+          <Cropper
+            ref='cropper'
+            src={fileUrl}
+            style={{ height: '100%', width: '100%' }}
+            AspectRatio
+            guides
+            dragMode='move'
+            minCropBoxWidth={minCropBoxWidth}
+            minCropBoxHeight={minCropBoxHeight}
+            ready={this.readyCopper}
+            crop={this._crop}
+            cropBoxResizable={false}
+            cropBoxMovable={false}
+            cropmove={this.move}
+            center
+            // viewMode={1}
+          />
+        )}
         {needRotate && (
           <div className={changeStyle(isMobile, 'spinBox')}>
             <img 
