@@ -88,7 +88,7 @@ class ReactDemo extends React.Component {
   render () {
     const { showCropper, fileUrl,isShowToast ,isError} = this.state;
     const { btnText,infoText,errorText, accept, uploadText,isMobile, imgSrc, onChange, minCropBoxWidth, minCropBoxHeight, width, height, toDataURLtype, btnBackText, btnConfirmText, needRotate } = this.props;
-     return (
+    return (
       <div className={changeStyle(isMobile, 'wrapper')}>
         {!isShowToast?
           <div>
