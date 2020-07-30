@@ -1,4 +1,3 @@
-
 import React from 'react';
 
 import Cropper from 'react-cropper';
@@ -7,18 +6,16 @@ import 'cropperjs/dist/cropper.css';
 import { changeStyle } from './index'
 import spinIcon from './assets/spinIcon'
 
-  function getStyle(obj, attr) {
-     if (obj.currentStyle) {//IE
-      return obj.currentStyle[attr];
-     } else {
-    console.log(111)
-      return getComputedStyle(obj, false)[attr];
-     }
-    }
+function getStyle(obj, attr) {
+  if (obj.currentStyle) {//IE
+    return obj.currentStyle[attr];
+  } else {
+    return getComputedStyle(obj, false)[attr];
+  }
+}
 
 
-
-function ismobile (test) {
+function ismobile(test) {
   const u = navigator.userAgent;
   const app = navigator.appVersion;
   if (
@@ -46,47 +43,54 @@ function ismobile (test) {
 }
 
 export default class Crop extends React.PureComponent {
-  constructor (props) {
+  constructor(props) {
     super(props);
     this.readyCopper = this.readyCopper.bind(this);
     // this.move = this.move.bind(this);
     this.state = {
-      angle: 0,
+      angle: this.props.defaultAngle, // 默认通过外部传入的defaultAngle来旋转图片
       wrapWH: null
     }
   }
 
-  componentDidMount(){
+  componentDidMount() {
     const wrap = document.getElementById('cropperWrap');
-    if(wrap){
+    if (wrap) {
       this.setState({
         wrapWH: [wrap.offsetWidth, wrap.offsetHeight]
       })
     }
   }
 
-  readyCopper () {
-    const { width,
-      height } = this.props;
-      console.log(123)
+  readyCopper() {
+    const {
+      width,
+      height
+    } = this.props;
+    const { angle } = this.state;
+    const box = document.querySelector('.cropper-wrap-box');
+    if (box) {
+      let left = getStyle(box, 'width');
+      left = left.split('p')[0]
+      let top = getStyle(box, 'height')
+      top = top.split('p')[0];
+      this.refs.cropper.setCropBoxData({
+        width: width,
+        height: height,
+        left: (left - 300) / 2,
+        top: (top - 300) / 2
+      });
 
-      const box = document.querySelector('.cropper-wrap-box');
-      if(box){
-        let left = getStyle(box,'width');
-        left = left.split('p')[0]
-        let top = getStyle(box,'height')
-        top = top.split('p')[0];
-        this.refs.cropper.setCropBoxData({ width: width, height: height, left:(left-300)/2,top:(top-300)/2});
-
-      }else{
-        this.refs.cropper.setCropBoxData({ width: width, height: height});
-      }
-    if (!ismobile(1)) {
-      this.refs.cropper.rotate('-90');
-      this.setState({
-        angle: -90
-      })
+    } else {
+      this.refs.cropper.setCropBoxData({ width: width, height: height });
     }
+    this.refs.cropper.rotate(angle);
+    // if (!ismobile(1)) {
+    //   this.refs.cropper.rotate('-90');
+    //   this.setState({
+    //     angle: -90
+    //   })
+    // }
     const info = this.refs.cropper.getData();
     console.log(info, 'info')
 
@@ -94,7 +98,7 @@ export default class Crop extends React.PureComponent {
     // return onChange(res)
   }
 
-  render () {
+  render() {
     const {
       fileUrl,
       minCropBoxWidth,
@@ -110,7 +114,7 @@ export default class Crop extends React.PureComponent {
     } = this.props;
     const { wrapWH } = this.state;
     return (
-      <div className={changeStyle(isMobile, 'image')} >
+      <div className={changeStyle(isMobile, 'image')}>
 
         <Cropper
           ref="cropper"
@@ -128,20 +132,20 @@ export default class Crop extends React.PureComponent {
           cropmove={this.move}
           center
           background={false}
-          viewMode={isMobile?3:0}
+          viewMode={isMobile ? 3 : 0}
         />
         {needRotate && (
           <div className={changeStyle(isMobile, 'spinBox')}>
-            <img 
-              src={spinIcon} 
-              onClick={()=>{
+            <img
+              src={spinIcon}
+              onClick={() => {
                 const { angle } = this.state;
                 const newAngle = angle + 90;
                 this.refs.cropper.rotate(newAngle);
                 this.setState({
                   angle: newAngle
                 })
-              }} 
+              }}
             />
           </div>
         )}

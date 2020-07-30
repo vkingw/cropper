@@ -1,6 +1,7 @@
 import React from 'react';
 import ImageCompressor from 'image-compressor.js';
 import PropTypes from 'prop-types'
+import EXIF from 'exif-js';
 
 import './index.css';
 import Crop from './cropper';
@@ -14,33 +15,64 @@ export const changeStyle = (isMobile, className) => {
     return className
   }
 }
-  function getStyle(obj, attr) {
-     if (obj.currentStyle) {//IE
-      return obj.currentStyle[attr];
-     } else {
-    console.log(111)
-      return getComputedStyle(obj, false)[attr];
-     }
-    }
-  function isQ(){
-    var ua = navigator.userAgent.toLowerCase();
-    if(ua.match(/MicroMessenger/i)=="micromessenger") {
-         return true;
-        //  alert("微信")
-    } else if (ua.match(/QQ/i) == "qq") {
-         return true;
-    }else {
-         return false;    
-        //  alert("不是微信浏览器或手机qq浏览器");
-    }
+
+function getStyle(obj, attr) {
+  if (obj.currentStyle) {//IE
+    return obj.currentStyle[attr];
+  } else {
+    return getComputedStyle(obj, false)[attr];
   }
+}
 
+function isQ() {
+  var ua = navigator.userAgent.toLowerCase();
+  if (ua.match(/MicroMessenger/i) == 'micromessenger') {
+    return true;
+    //  alert("微信")
+  } else if (ua.match(/QQ/i) == 'qq') {
+    return true;
+  } else {
+    return false;
+    //  alert("不是微信浏览器或手机qq浏览器");
+  }
+}
 
-
+// 如果图片有exif信息，通过读取来旋转图片
+const getRotationAngle = (e, callback) => {
+  let file = e.target.files[0];
+  //图片方向角
+  let Orientation = null;
+  if (file) {
+    //获取照片方向角属性，用户旋转控制
+    EXIF.getData(file, function () {
+      EXIF.getAllTags(this);
+      Orientation = EXIF.getTag(this, 'Orientation');
+      // 判断是iOS
+      if (navigator.userAgent.match(/iphone/i)) {
+        if (Orientation ===1 || !Orientation) {
+          callback(0);
+        } else if (Orientation !== '' && Orientation !== 1) {
+          switch (Orientation) {
+            case 6://需要顺时针（向左）90度旋转
+              callback(90);
+              break;
+            case 8://需要逆时针（向右）90度旋转
+              callback(270);
+              break;
+            case 3://需要180度旋转
+              callback(180);
+              break;
+          }
+        }
+      }
+      //return;
+    });
+  }
+}
 
 
 class ReactDemo extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       showCropper: false,
@@ -49,8 +81,8 @@ class ReactDemo extends React.Component {
         maxWidth: 300,
         maxHeight: 300,
         convertSize: 10000,
-        isShowToast:false,
-        isError:false
+        isShowToast: false,
+        isError: false
       }
     }
     this.onFileChange = this.onFileChange.bind(this)
@@ -59,39 +91,42 @@ class ReactDemo extends React.Component {
 
   }
 
-  componentDidMount(){
+  componentDidMount() {
     const doc = document.querySelector('.image');
-    if(doc){
-      let width = getStyle(doc,'width');
+    if (doc) {
+      let width = getStyle(doc, 'width');
       width = width.split('p')[0];
-        doc.style.height = width
+      doc.style.height = width
     }
 
   }
 
-  getBase64 (img, callback) {
+  getBase64(img, callback) {
     const reader = new FileReader();
     reader.addEventListener('load', () => callback(reader.result));
     reader.readAsDataURL(img);
   }
 
-  onFileChange (e) {
+  onFileChange(e) {
+    getRotationAngle(e, (angle) => {
+      this.setState({ angle: angle })
+    });
     this.setState({
-      isShowToast:true
+      isShowToast: true
     })
     const { files } = e.target;
-    const { compress,maxSize } = this.props;
+    const { compress, maxSize } = this.props;
     const { defaultCompress } = this.state;
     const resCompress = { ...defaultCompress, ...compress };
     const fileSize = files[0].size || 0
-    if(fileSize>maxSize*1024*1024){
+    if (fileSize > maxSize * 1024 * 1024) {
       this.setState({
-        isError:true,
+        isError: true,
       })
-      setTimeout(()=>
-      this.setState({
-        isShowToast:false
-      }),2000)
+      setTimeout(() =>
+        this.setState({
+          isShowToast: false
+        }), 2000)
       return
     }
 
@@ -102,7 +137,7 @@ class ReactDemo extends React.Component {
         .then(result => {
           this.getBase64(result, res => {
             this.setState({
-              isShowToast:false,
+              isShowToast: false,
               fileUrl: res,
               showCropper: true,
             });
@@ -111,32 +146,34 @@ class ReactDemo extends React.Component {
     }
   }
 
-  changeShowCropper (showCropper) {
+  changeShowCropper(showCropper) {
     this.setState({
       showCropper
     })
   }
 
 
-  render () {
-    const { showCropper, fileUrl,isShowToast ,isError} = this.state;
-    const { btnText,infoText,errorText, accept, uploadText,isMobile, imgSrc, onChange, minCropBoxWidth, minCropBoxHeight, width, height, toDataURLtype, btnBackText, btnConfirmText, needRotate } = this.props;
+  render() {
+    const { showCropper, fileUrl, isShowToast, isError,angle } = this.state;
+    const { btnText, infoText, errorText, accept, uploadText, isMobile, imgSrc, onChange, minCropBoxWidth, minCropBoxHeight, width, height, toDataURLtype, btnBackText, btnConfirmText, needRotate } = this.props;
     return (
       <div className={changeStyle(isMobile, 'wrapper')}>
-        {!isShowToast?
+        {!isShowToast ?
           <div className={changeStyle(isMobile, 'container')}>
-          {!showCropper &&
+            {!showCropper &&
             <div className={changeStyle(isMobile, 'content')}>
               <div className={changeStyle(isMobile, 'image')}>
                 <img className={changeStyle(isMobile, 'img')} src={imgSrc} alt="" />
-  
+
               </div>
               <div className={changeStyle(isMobile, 'btnGroup')}>
                 <div className={changeStyle(isMobile, 'fileBtn')}>
 
-                  {isQ()?
-                    <input className={changeStyle(isMobile, 'file')} capture="camera"  type="file" onChange={this.onFileChange} accept={accept} mutiple="mutiple" />:
-                    <input className={changeStyle(isMobile, 'file')} type="file" onChange={this.onFileChange} accept={accept} mutiple="mutiple" />
+                  {isQ() ?
+                    <input className={changeStyle(isMobile, 'file')} capture="camera" type="file"
+                           onChange={this.onFileChange} accept={accept} mutiple="mutiple" /> :
+                    <input className={changeStyle(isMobile, 'file')} type="file"
+                           onChange={this.onFileChange} accept={accept} mutiple="mutiple" />
                   }
                   <div className={changeStyle(isMobile, 'btn')}>
                     {btnText}
@@ -147,8 +184,8 @@ class ReactDemo extends React.Component {
                 <div className={changeStyle(isMobile, 'tip')}>{infoText}</div>
               </div>
             </div>
-          }
-          {showCropper &&
+            }
+            {showCropper &&
             <div className={changeStyle(isMobile, 'content')}>
               <Crop
                 fileUrl={fileUrl}
@@ -165,14 +202,15 @@ class ReactDemo extends React.Component {
                 needRotate={needRotate}
                 onChangeShowCropper={showCropper => this.changeShowCropper(showCropper)}
                 onChangeShowCropper={showCropper => this.changeShowCropper(showCropper)}
+                defaultAngle={angle}
               />
             </div>
-          }
-          </div>:
-          <Modal uploadText={uploadText} isError={isError} errorText={errorText}/>
-          
-}
-      </div >)
+            }
+          </div> :
+          <Modal uploadText={uploadText} isError={isError} errorText={errorText} />
+
+        }
+      </div>)
   }
 }
 
@@ -187,7 +225,9 @@ ReactDemo.defaultProps = {
     convertSize: 10000,
   },
   accept: '.jpg, .jpeg, .png',
-  onChange: (e) => { console.log('result', e) },
+  onChange: (e) => {
+    console.log('result', e)
+  },
   minCropBoxWidth: 100,
   minCropBoxHeight: 100,
   width: 300,
@@ -195,9 +235,9 @@ ReactDemo.defaultProps = {
   toDataURLtype: 'image/jpeg',
   imgSrc: '',
   isMobile: false,
-  uploadText:'正在上传',
-  errorText:'上传大小不能超过10M',
-  maxSize:10,
+  uploadText: '正在上传',
+  errorText: '上传大小不能超过10M',
+  maxSize: 10,
   needRotate: true
 }
 
@@ -224,7 +264,6 @@ ReactDemo.propTypes = {
   isMobile: PropTypes.bool,
   needRotate: PropTypes.bool,
 }
-
 
 
 export default ReactDemo;
