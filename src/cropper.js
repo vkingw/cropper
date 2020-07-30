@@ -52,6 +52,16 @@ export default class Crop extends React.PureComponent {
     // this.move = this.move.bind(this);
     this.state = {
       angle: 0,
+      wrapWH: null
+    }
+  }
+
+  componentDidMount(){
+    const wrap = document.getElementById('cropperWrap');
+    if(wrap){
+      this.setState({
+        wrapWH: [wrap.offsetWidth, wrap.offsetHeight]
+      })
     }
   }
 
@@ -98,6 +108,7 @@ export default class Crop extends React.PureComponent {
       isMobile,
       needRotate
     } = this.props;
+    const { wrapWH } = this.state;
     return (
       <div className={changeStyle(isMobile, 'image')} >
 
