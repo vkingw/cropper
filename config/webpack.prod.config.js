@@ -15,13 +15,13 @@ const prodConfig = {
   module: {
     rules: [
       {
-        test: new RegExp(`^(.*\\.global).*\\.css`),
-        loader: [MiniCssExtractPlugin.loader, 'css-loader?modules'],
+        test: /\.css$/,
+        loader: [MiniCssExtractPlugin.loader, 'css-loader'],
       },
-      {
-        test: new RegExp(`^(?!.*\\.global).*\\.css`),
-        loader: ['style-loader', 'css-loader'],
-      },
+      // {
+      //   test: new RegExp(`^(?!.*\\.global).*\\.css`),
+      //   loader: ['style-loader', 'css-loader'],
+      // },
       {
         test: /\.(png|gif|jpg)$/,
         loader: 'file-loader'

@@ -14,6 +14,30 @@ export const changeStyle = (isMobile, className) => {
     return className
   }
 }
+  function getStyle(obj, attr) {
+     if (obj.currentStyle) {//IE
+      return obj.currentStyle[attr];
+     } else {
+    console.log(111)
+      return getComputedStyle(obj, false)[attr];
+     }
+    }
+  function isQ(){
+    var ua = navigator.userAgent.toLowerCase();
+    if(ua.match(/MicroMessenger/i)=="micromessenger") {
+         return true;
+        //  alert("微信")
+    } else if (ua.match(/QQ/i) == "qq") {
+         return true;
+    }else {
+         return false;    
+        //  alert("不是微信浏览器或手机qq浏览器");
+    }
+  }
+
+
+
+
 
 class ReactDemo extends React.Component {
   constructor (props) {
@@ -32,6 +56,16 @@ class ReactDemo extends React.Component {
     this.onFileChange = this.onFileChange.bind(this)
     this.getBase64 = this.getBase64.bind(this);
     this.changeShowCropper = this.changeShowCropper.bind(this);
+
+  }
+
+  componentDidMount(){
+    const doc = document.querySelector('.image');
+    if(doc){
+      let width = getStyle(doc,'width');
+      width = width.split('p')[0];
+        doc.style.height = width
+    }
 
   }
 
@@ -84,14 +118,13 @@ class ReactDemo extends React.Component {
   }
 
 
-
   render () {
     const { showCropper, fileUrl,isShowToast ,isError} = this.state;
     const { btnText,infoText,errorText, accept, uploadText,isMobile, imgSrc, onChange, minCropBoxWidth, minCropBoxHeight, width, height, toDataURLtype, btnBackText, btnConfirmText, needRotate } = this.props;
-     return (
+    return (
       <div className={changeStyle(isMobile, 'wrapper')}>
         {!isShowToast?
-          <div>
+          <div className={changeStyle(isMobile, 'container')}>
           {!showCropper &&
             <div className={changeStyle(isMobile, 'content')}>
               <div className={changeStyle(isMobile, 'image')}>
@@ -100,7 +133,11 @@ class ReactDemo extends React.Component {
               </div>
               <div className={changeStyle(isMobile, 'btnGroup')}>
                 <div className={changeStyle(isMobile, 'fileBtn')}>
-                  <input className={changeStyle(isMobile, 'file')} type="file" onChange={this.onFileChange} accept={accept} capture="camera" />
+
+                  {isQ()?
+                    <input className={changeStyle(isMobile, 'file')} capture="camera"  type="file" onChange={this.onFileChange} accept={accept} mutiple="mutiple" />:
+                    <input className={changeStyle(isMobile, 'file')} type="file" onChange={this.onFileChange} accept={accept} mutiple="mutiple" />
+                  }
                   <div className={changeStyle(isMobile, 'btn')}>
                     {btnText}
                   </div>

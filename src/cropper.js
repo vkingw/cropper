@@ -4,9 +4,17 @@ import React from 'react';
 import Cropper from 'react-cropper';
 
 import 'cropperjs/dist/cropper.css';
-import * as styles from './index.css';
 import { changeStyle } from './index'
 import spinIcon from './assets/spinIcon'
+
+  function getStyle(obj, attr) {
+     if (obj.currentStyle) {//IE
+      return obj.currentStyle[attr];
+     } else {
+    console.log(111)
+      return getComputedStyle(obj, false)[attr];
+     }
+    }
 
 
 
@@ -50,9 +58,19 @@ export default class Crop extends React.PureComponent {
   readyCopper () {
     const { width,
       height } = this.props;
-      const offsetWidth = document.querySelector('.cropper-wrap-box').offsetWidth;
-      const offsetHeight = document.querySelector('.cropper-wrap-box').offsetHeight;
-    this.refs.cropper.setCropBoxData({ width: width, height: height, left:(offsetWidth-300)/2,top:(offsetHeight-300)/2});
+      console.log(123)
+
+      const box = document.querySelector('.cropper-wrap-box');
+      if(box){
+        let left = getStyle(box,'width');
+        left = left.split('p')[0]
+        let top = getStyle(box,'height')
+        top = top.split('p')[0];
+        this.refs.cropper.setCropBoxData({ width: width, height: height, left:(left-300)/2,top:(top-300)/2});
+
+      }else{
+        this.refs.cropper.setCropBoxData({ width: width, height: height});
+      }
     if (!ismobile(1)) {
       this.refs.cropper.rotate('-90');
       this.setState({
@@ -98,7 +116,8 @@ export default class Crop extends React.PureComponent {
           cropBoxMovable={false}
           cropmove={this.move}
           center
-        // viewMode={1}
+          background={false}
+          viewMode={isMobile?3:0}
         />
         {needRotate && (
           <div className={changeStyle(isMobile, 'spinBox')}>
