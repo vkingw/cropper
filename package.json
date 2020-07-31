@@ -1,6 +1,6 @@
 {
   "name": "virsical-cropper",
-  "version": "1.0.38",
+  "version": "1.0.42",
   "description": "virsical-cropper",
   "main": "lib/index.js",
   "scripts": {

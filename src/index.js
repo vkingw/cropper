@@ -128,6 +128,10 @@ class ReactDemo extends React.Component {
           isShowToast: false
         }), 2000)
       return
+    }else{
+      this.setState({
+        isError: false,
+      })
     }
 
     if (files) {
@@ -166,9 +170,9 @@ class ReactDemo extends React.Component {
                 <img className={changeStyle(isMobile, 'img')} src={imgSrc} alt="" />
 
               </div>
+
               <div className={changeStyle(isMobile, 'btnGroup')}>
                 <div className={changeStyle(isMobile, 'fileBtn')}>
-
                   {isQ() ?
                     <input className={changeStyle(isMobile, 'file')} capture="camera" type="file"
                            onChange={this.onFileChange} accept={accept} mutiple="mutiple" /> :
