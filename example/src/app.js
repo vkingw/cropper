@@ -2,7 +2,7 @@
 import React from 'react'
 import { render } from 'react-dom'
 // import ReactDemo from '../../src' // 引入组件
-import ReactDemo from '../../lib/index.js';
+import ReactDemo from '../../src/index.js';
 import '../../lib/main.min.css'
 const App = () => 
 <div className="container">
