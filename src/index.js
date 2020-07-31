@@ -54,10 +54,10 @@ const getRotationAngle = (e, callback) => {
         } else if (Orientation !== '' && Orientation !== 1) {
           switch (Orientation) {
             case 6://需要顺时针（向左）90度旋转
-              callback(90);
+              callback(270)
               break;
             case 8://需要逆时针（向右）90度旋转
-              callback(270);
+              callback(90);
               break;
             case 3://需要180度旋转
               callback(180);
