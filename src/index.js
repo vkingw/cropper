@@ -112,23 +112,17 @@ class ReactDemo extends React.Component {
     getRotationAngle(e, (angle) => {
       this.setState({ angle: angle })
     });
-    this.setState({
-      isShowToast: true
-    })
+    const { compress, maxSize,maxSizeErrorHandle,loadingHandle } = this.props;
+    // 开始加载图片，调用回调通知图片加载中
+    loadingHandle(true);
     const { files } = e.target;
-    const { compress, maxSize } = this.props;
     const { defaultCompress } = this.state;
     const resCompress = { ...defaultCompress, ...compress };
     const fileSize = files[0].size || 0
+    // 文件size超过限制后，通过回调触发外部提示
     if (fileSize > maxSize * 1024 * 1024) {
-      this.setState({
-        isError: true,
-      })
-      setTimeout(() =>
-        this.setState({
-          isShowToast: false
-        }), 2000)
-      return
+      maxSizeErrorHandle(maxSize);
+      loadingHandle(false);
     }
 
     if (files) {
@@ -137,8 +131,9 @@ class ReactDemo extends React.Component {
         .compress(files[0], resCompress)
         .then(result => {
           this.getBase64(result, res => {
+            // 图片加载完毕，调用回调通知图片加载完成
+            loadingHandle(false);
             this.setState({
-              isShowToast: false,
               fileUrl: res,
               showCropper: true,
             });
@@ -155,8 +150,8 @@ class ReactDemo extends React.Component {
 
 
   render() {
-    const { showCropper, fileUrl, isShowToast, isError,angle } = this.state;
-    const { btnText, infoText, errorText, accept, uploadText, isMobile, imgSrc, onChange, minCropBoxWidth, minCropBoxHeight, width, height, toDataURLtype, btnBackText, btnConfirmText, needRotate } = this.props;
+    const { showCropper, fileUrl, angle } = this.state;
+    const { btnText, infoText,  accept,  isMobile, imgSrc, onChange, minCropBoxWidth, minCropBoxHeight, width, height, toDataURLtype, btnBackText, btnConfirmText, needRotate } = this.props;
     return (
       <div className={changeStyle(isMobile, 'wrapper')}>
         {!isShowToast ?
@@ -236,8 +231,6 @@ ReactDemo.defaultProps = {
   toDataURLtype: 'image/jpeg',
   imgSrc: '',
   isMobile: false,
-  uploadText: '正在上传',
-  errorText: '上传大小不能超过10M',
   maxSize: 10,
   needRotate: true
 }
@@ -264,6 +257,9 @@ ReactDemo.propTypes = {
   errorText: PropTypes.string,
   isMobile: PropTypes.bool,
   needRotate: PropTypes.bool,
+  loadingHandle:PropTypes.func.isRequired,
+  maxSizeErrorHandle:PropTypes.func.isRequired
+
 }
 
 
