@@ -23,7 +23,7 @@ btnText
 ```
 infoText
 ```
-#### 提示信息文字<br/>type:&nbsp;&nbsp;string&nbsp;&nbsp;|&nbsp;&nbsp;默认值:&nbsp;&nbsp;'上传照片用于人脸识别开门或者签到' ####
+#### 提示信息文字<br/>type:&nbsp;&nbsp;string&nbsp;&nbsp;|| reactNode |&nbsp;&nbsp;默认值:&nbsp;&nbsp;'上传照片用于人脸识别开门或者签到' ####
 ```
 uploadText
 ```
@@ -61,6 +61,22 @@ btnConfirmText
 isMobile
 ```
 #### 是否为移动端<br/>type:&nbsp;&nbsp;boolean&nbsp;&nbsp;|&nbsp;&nbsp;默认值:&nbsp;&nbsp;false####
+```
+needRotate
+```
+#### 是否需要旋转<br/>type:&nbsp;&nbsp;boolean&nbsp;&nbsp;|&nbsp;&nbsp;默认值:&nbsp;&nbsp;true####
+```
+compress
+```
+#### 图片压缩参数；参考[地址](https://www.npmjs.com/package/image-compressor)<br/>type:&nbsp;&nbsp;object&nbsp;&nbsp;|&nbsp;&nbsp;默认值:&nbsp;&nbsp;
+```
+{
+  maxWidth: 300,
+  maxHeight: 300,
+  convertSize: 10000,
+}
+  ```
+   
 ```
 toDataURLtype
 ```
