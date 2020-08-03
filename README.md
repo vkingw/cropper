@@ -23,7 +23,7 @@ btnText
 ```
 infoText
 ```
-#### 提示信息文字<br/>type:&nbsp;&nbsp;string&nbsp;&nbsp;|&nbsp;&nbsp;默认值:&nbsp;&nbsp;'上传照片用于人脸识别开门或者签到' ####
+#### 提示信息文字<br/>type:&nbsp;&nbsp;string&nbsp;&nbsp;|| reactNode |&nbsp;&nbsp;默认值:&nbsp;&nbsp;'上传照片用于人脸识别开门或者签到' ####
 ```
 uploadText
 ```
@@ -62,6 +62,7 @@ isMobile
 ```
 #### 是否为移动端<br/>type:&nbsp;&nbsp;boolean&nbsp;&nbsp;|&nbsp;&nbsp;默认值:&nbsp;&nbsp;false####
 ```
+
 loadingHandle
 ```
 #### 图片上传回调<br/>type:&nbsp;&nbsp;function&nbsp;&nbsp;|&nbsp;&nbsp;默认值:&nbsp;&nbsp;无 ####
@@ -81,6 +82,21 @@ maxSizeErrorHandle(size){}
 size为图片最大值，不能超过
 
 使用者在此方法里面，根据PC或者App调用正错误提示组件，显示内容自己做国际化即可
+=======
+needRotate
+```
+#### 是否需要旋转<br/>type:&nbsp;&nbsp;boolean&nbsp;&nbsp;|&nbsp;&nbsp;默认值:&nbsp;&nbsp;true####
+```
+compress
+```
+#### 图片压缩参数；参考[地址](https://www.npmjs.com/package/image-compressor)<br/>type:&nbsp;&nbsp;object&nbsp;&nbsp;|&nbsp;&nbsp;默认值:&nbsp;&nbsp;
+```
+{
+  maxWidth: 300,
+  maxHeight: 300,
+  convertSize: 10000,
+}
+```
 ```
 toDataURLtype
 ```

@@ -123,6 +123,19 @@ class ReactDemo extends React.Component {
     if (fileSize > maxSize * 1024 * 1024) {
       maxSizeErrorHandle(maxSize);
       loadingHandle(false);
+//       this.setState({
+//         isError: true,
+//       })
+//       setTimeout(() =>
+//         this.setState({
+//           isShowToast: false
+//         }), 2000)
+//       return
+//     }else{
+//       this.setState({
+//         isError: false,
+//       })
+
     }
 
     if (files) {
@@ -162,9 +175,9 @@ class ReactDemo extends React.Component {
                 <img className={changeStyle(isMobile, 'img')} src={imgSrc} alt="" />
 
               </div>
+
               <div className={changeStyle(isMobile, 'btnGroup')}>
                 <div className={changeStyle(isMobile, 'fileBtn')}>
-
                   {isQ() ?
                     <input className={changeStyle(isMobile, 'file')} capture="camera" type="file"
                            onChange={this.onFileChange} accept={accept} mutiple="mutiple" /> :
