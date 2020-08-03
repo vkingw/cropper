@@ -83,7 +83,8 @@ class ReactDemo extends React.Component {
         convertSize: 10000,
         isShowToast: false,
         isError: false
-      }
+      },
+      angle: 0
     }
     this.onFileChange = this.onFileChange.bind(this)
     this.getBase64 = this.getBase64.bind(this);
