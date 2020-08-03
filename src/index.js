@@ -5,7 +5,6 @@ import EXIF from 'exif-js';
 
 import './index.css';
 import Crop from './cropper';
-import Modal from './modal';
 
 
 export const changeStyle = (isMobile, className) => {
@@ -167,7 +166,6 @@ class ReactDemo extends React.Component {
     const { btnText, infoText,  accept,  isMobile, imgSrc, onChange, minCropBoxWidth, minCropBoxHeight, width, height, toDataURLtype, btnBackText, btnConfirmText, needRotate } = this.props;
     return (
       <div className={changeStyle(isMobile, 'wrapper')}>
-        {!isShowToast ?
           <div className={changeStyle(isMobile, 'container')}>
             {!showCropper &&
             <div className={changeStyle(isMobile, 'content')}>
@@ -215,8 +213,7 @@ class ReactDemo extends React.Component {
               />
             </div>
             }
-          </div> :
-          <Modal uploadText={uploadText} isError={isError} errorText={errorText} />
+          </div> 
 
         }
       </div>)
