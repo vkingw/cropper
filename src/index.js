@@ -123,19 +123,7 @@ class ReactDemo extends React.Component {
     if (fileSize > maxSize * 1024 * 1024) {
       maxSizeErrorHandle(maxSize);
       loadingHandle(false);
-//       this.setState({
-//         isError: true,
-//       })
-//       setTimeout(() =>
-//         this.setState({
-//           isShowToast: false
-//         }), 2000)
-//       return
-//     }else{
-//       this.setState({
-//         isError: false,
-//       })
-
+      return;
     }
 
     if (files) {
