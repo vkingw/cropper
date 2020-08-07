@@ -122,6 +122,11 @@ class ReactDemo extends React.Component {
     if (fileSize > maxSize * 1024 * 1024) {
       maxSizeErrorHandle(maxSize);
       loadingHandle(false);
+      // 图片超过最大size限制后，清空input value，解决用同一张图片不停上传无提示问题。
+      const cropperInput = document.getElementById('cropperInput');
+      if(cropperInput){
+        cropperInput.value='';
+      }
       return;
     }
 
@@ -165,9 +170,9 @@ class ReactDemo extends React.Component {
               <div className={changeStyle(isMobile, 'btnGroup')}>
                 <div className={changeStyle(isMobile, 'fileBtn')}>
                   {isQ() ?
-                    <input className={changeStyle(isMobile, 'file')} capture="camera" type="file"
+                    <input id="cropperInput" className={changeStyle(isMobile, 'file')} capture="camera" type="file"
                            onChange={this.onFileChange} accept={accept} mutiple="mutiple" /> :
-                    <input className={changeStyle(isMobile, 'file')} type="file"
+                    <input id="cropperInput" className={changeStyle(isMobile, 'file')} type="file"
                            onChange={this.onFileChange} accept={accept} mutiple="mutiple" />
                   }
                   <div className={changeStyle(isMobile, 'btn')}>
