@@ -203,7 +203,6 @@ class ReactDemo extends React.Component {
             }
           </div> 
 
-        }
       </div>)
   }
 }
