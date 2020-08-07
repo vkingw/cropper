@@ -66,26 +66,27 @@ isMobile
 loadingHandle
 ```
 #### 图片上传回调<br/>type:&nbsp;&nbsp;function&nbsp;&nbsp;|&nbsp;&nbsp;默认值:&nbsp;&nbsp;无 ####
-
+```
 loadingHandle(state){}  
+```
+#### state为boolean，true为正在上传，false为结束上传 ####
 
-state为boolean，true为正在上传，false为结束上传
-
-使用者在此方法里面，根据PC或者App调用正在上传组件，显示内容自己做国际化即可
+#### 使用者在此方法里面，根据PC或者App调用正在上传组件，显示内容自己做国际化即可 ####
 ```
 maxSizeErrorHandle
 ```
-#### 图片超最大size回调<br/>type:&nbsp;&nbsp;function&nbsp;&nbsp;|&nbsp;&nbsp;默认值:&nbsp;&nbsp;无 ####
-
-maxSizeErrorHandle(size){}  
-
-size为图片最大值，不能超过
-
-使用者在此方法里面，根据PC或者App调用正错误提示组件，显示内容自己做国际化即可
-=======
-needRotate
+#### 图片超最大size回调<br/>type:&nbsp;&nbsp;function&nbsp;&nbsp;|&nbsp;&nbsp;默认值:&nbsp;&nbsp;无  &nbsp;&nbsp;需配合maxSize一起使用####
 ```
-#### 是否需要旋转<br/>type:&nbsp;&nbsp;boolean&nbsp;&nbsp;|&nbsp;&nbsp;默认值:&nbsp;&nbsp;true####
+maxSizeErrorHandle(size){}  
+```
+#### size为图片最大值，不能超过 ####
+
+#### 使用者在此方法里面，根据PC或者App调用正错误提示组件，显示内容自己做国际化即可 ####
+```
+needRotate<!-- slide -->
+
+```
+#### 是否需要旋转<br/>type:&nbsp;&nbsp;boolean&nbsp;&nbsp;|&nbsp;&nbsp;默认值:&nbsp;&nbsp;true ####
 ```
 compress
 ```
