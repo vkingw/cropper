@@ -161,3 +161,8 @@ height
 ```
 
 #### [参考地址](https://blog.csdn.net/achejq/article/details/93240104)<br/>type:&nbsp;&nbsp;number&nbsp;&nbsp;|&nbsp;&nbsp;默认值:&nbsp;&nbsp;300
+
+```
+cropperAngle
+```
+#### 默认进行旋转；<br/> type:&nbsp;&nbsp;boolean&nbsp;&nbsp;|&nbsp;&nbsp;默认值:&nbsp;&nbsp;false
