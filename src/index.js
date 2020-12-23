@@ -105,9 +105,16 @@ class ReactDemo extends React.Component {
   }
 
   onFileChange(e) {
-    getRotationAngle(e, (angle) => {
-      this.setState({ angle: angle });
-    });
+
+    const { cropperAngle } = this.props;
+    if(cropperAngle){
+      this.setState({ angle: 0 });
+    } else {
+      getRotationAngle(e, (angle) => {
+        this.setState({ angle: angle });
+      });
+    }
+
     const { compress, maxSize, maxSizeErrorHandle, loadingHandle } = this.props;
     // 开始加载图片，调用回调通知图片加载中
     loadingHandle(true);
@@ -164,7 +171,7 @@ class ReactDemo extends React.Component {
       toDataURLtype,
       btnBackText,
       btnConfirmText,
-      needRotate,
+      needRotate
     } = this.props;
     return (
       <div className={changeStyle(isMobile, "wrapper")}>
@@ -261,6 +268,7 @@ ReactDemo.defaultProps = {
   isMobile: false,
   maxSize: 10,
   needRotate: true,
+  cropperAngle: false,
 };
 
 ReactDemo.propTypes = {
@@ -284,6 +292,7 @@ ReactDemo.propTypes = {
   needRotate: PropTypes.bool,
   loadingHandle: PropTypes.func.isRequired,
   maxSizeErrorHandle: PropTypes.func.isRequired,
+  cropperAngle: PropTypes.func.isRequired,
 };
 
 export default ReactDemo;
