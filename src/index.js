@@ -37,7 +37,7 @@ function isQ() {
 }
 
 // 如果图片有exif信息，通过读取来旋转图片
-const getRotationAngle = (e, callback) => {
+const getRotationAngle = (e, cropperAngle, callback) => {
   let file = e.target.files[0];
   //图片方向角
   let Orientation = null;
@@ -46,9 +46,12 @@ const getRotationAngle = (e, callback) => {
     EXIF.getData(file, function () {
       EXIF.getAllTags(this);
       Orientation = EXIF.getTag(this, "Orientation");
+      const SceneType = EXIF.getTag(this, "SceneType");
       // 判断是iOS
       if (navigator.userAgent.match(/iphone/i)) {
-        if (Orientation === 1 || !Orientation) {
+        if(cropperAngle && !SceneType) {
+          callback(0);
+        } else if (Orientation === 1 || !Orientation) {
           callback(0);
         } else if (Orientation !== "" && Orientation !== 1) {
           switch (Orientation) {
@@ -107,13 +110,8 @@ class ReactDemo extends React.Component {
   onFileChange(e) {
 
     const { cropperAngle } = this.props;
-    if(cropperAngle){
-      this.setState({ angle: 0 });
-    } else {
-      getRotationAngle(e, (angle) => {
-        this.setState({ angle: angle });
-      });
-    }
+
+    getRotationAngle(e, cropperAngle, (angle) => {this.setState({ angle: angle });});
 
     const { compress, maxSize, maxSizeErrorHandle, loadingHandle } = this.props;
     // 开始加载图片，调用回调通知图片加载中
