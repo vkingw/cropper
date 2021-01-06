@@ -47,10 +47,11 @@ const getRotationAngle = (e, cropperAngle, callback) => {
       EXIF.getAllTags(this);
       Orientation = EXIF.getTag(this, "Orientation");
       const SceneType = EXIF.getTag(this, "SceneType");
+      const SceneCaptureType = EXIF.getTag(this, "SceneCaptureType");
       // 判断是iOS
       if (navigator.userAgent.match(/iphone/i)) {
-        if(cropperAngle && !SceneType) {
-          callback(0);
+        if(cropperAngle && !SceneType && !SceneCaptureType) {
+         callback(0);
         } else if (Orientation === 1 || !Orientation) {
           callback(0);
         } else if (Orientation !== "" && Orientation !== 1) {
